@@ -41,7 +41,7 @@ function handleEvent(event) {
 
   // 測試結果用文字輸出
   const response = `
-📅 看房時間：${date.toLocaleString()}
+📅 看房時間：${formatDateTime(date.toLocaleString())}
 📍 地點：${location}
 🔗 網址：${url || '無'}
   `.trim()
@@ -50,6 +50,29 @@ function handleEvent(event) {
     type: 'text',
     text: response
   })
+}
+
+function formatDateTime(dateStr) {
+  const date = new Date(dateStr)
+
+  if (isNaN(date.getTime())) {
+    return 'Invalid Date'
+  }
+
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1 // 月份從 0 開始
+  const day = date.getDate()
+
+  // 取得星期（去掉「週」）
+  const weekday = new Intl.DateTimeFormat('zh-TW', { weekday: 'short' })
+    .format(date)
+    .replace('週', '')
+
+  // 取得 24 小時制時間
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+
+  return `${year}/${month}/${day}(${weekday}) ${hours}:${minutes}`
 }
 
 const port = process.env.PORT || 3000
