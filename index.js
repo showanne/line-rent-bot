@@ -1,6 +1,7 @@
 // index.js
 require('dotenv').config()
 const express = require('express')
+const bodyParser = require('body-parser')
 const { middleware, Client } = require('@line/bot-sdk')
 const { parseMessage } = require('./utils/parseMessage')
 
@@ -12,6 +13,8 @@ const config = {
 }
 
 const lineClient = new Client(config)
+
+app.use(bodyParser.json())
 
 app.post('/webhook', middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleEvent))
@@ -43,6 +46,14 @@ function handleEvent(event) {
   const response = `
 📅 看房時間：${date.toLocaleString()}
 📍 地點：${location}
+📍 詳細資訊：${location}
+       標題：${title}
+       租金：${price}
+       地址：${address}
+       格局：${layout}
+       樓層：${floor}
+       坪數：${area}
+       聯絡：${contact}
 🔗 網址：${url || '無'}
   `.trim()
 
