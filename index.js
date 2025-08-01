@@ -1,7 +1,6 @@
 // index.js
 require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser')
 const { middleware, Client } = require('@line/bot-sdk')
 const { parseMessage } = require('./utils/parseMessage')
 
@@ -13,8 +12,6 @@ const config = {
 }
 
 const lineClient = new Client(config)
-
-app.use(bodyParser.json())
 
 app.post('/webhook', middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleEvent))
